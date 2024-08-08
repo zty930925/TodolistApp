@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2  #flutter自帶的圖標庫(https://www.fluttericon.cn/)
   provider: ^6.0.0  #狀態管理包
+  intl: ^0.17.0
   path_provider: ^2.0.0 #在不同資料表示形式（包括 JSON 和 UTF-8）之間進行轉換的編碼器和解碼器
 
 dev_dependencies:
