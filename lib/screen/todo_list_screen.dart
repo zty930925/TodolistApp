@@ -7,59 +7,64 @@ import '../service/work_note_service.dart';
 import 'package:intl/intl.dart';
 
 // todo的一覽頁
-// 使用StatefulWidget來讓畫面可以刷新
+// 使用StatefulWidget來讓畫面可以刷新(與時俱進)
 class TodoListScreen extends StatefulWidget {
   @override
+  //定義一個畫面，展示與管理todo清單
   _TodoListScreenState createState() => _TodoListScreenState();
 }
 
+//定義狀態類，用於管理畫面的狀態變化
 class _TodoListScreenState extends State<TodoListScreen> {
+  //建立本地文件存取的數據訪問對象
   final TodoDaoLocalFile _todoDao = TodoDaoLocalFile();
   final UserDaoLocalFile _userDao = UserDaoLocalFile();
   final WorkNoteService _workNoteService = WorkNoteService();
 
-  // 設定文字輸入框的控制器
+  //設定文字輸入框的控制器，負責讀取和管理用戶的輸入
   final TextEditingController _controller = TextEditingController();
 
-  // 設定初始值
+  //初始化To-Do清單和使用者的數據
   List<Todo> _todos = [];
   User _user = User(totalTodos: 0, completeTodos: 0);
 
-  // 每次刷新都去重新讀取todo.json和user.json
+  //初始化狀態時，自動載入本地的Todo和使用者數據
   @override
   void initState() {
     super.initState();
+    //調用方法載入數據
     _loadData();
   }
 
-  // 讀取todo.json和user.json
+  //從本地檔案中讀取Todo清單和使用者數據
   Future<void> _loadData() async {
+    //讀取todo清單
     final todos = await _todoDao.readTodos();
+    //讀取使用者數據
     final user = await _userDao.readUser();
     setState(() {
-      _todos = todos;
-      _user = user;
+      _todos = todos; //更新狀態中的todo清單
+      _user = user; //更新狀態中的使用者數據
     });
   }
 
   // 新增todo
   // 會去寫入todo.json和user.json
   void _addTodo() async {
-    final description = _controller.text;
+    final description = _controller.text; //取得用戶輸入的描述
     if (description.isNotEmpty) {
+      //輸入建構子縮需欄位，建立一個新的todo項目
       final newTodo = Todo(
         isComplete: false,
         content: description,
         creationTime: DateTime.now(),
       );
       setState(() {
-        _todos.add(newTodo);
-        _user.totalTodos++;
+        _todos.add(newTodo); //將新項目加入清單
+        _user.totalTodos++; //更新使用者的總todo數量
       });
       _workNoteService.addTodo(newTodo);
-      /* await _todoDao.writeTodos(_todos);
-      await _userDao.writeUser(_user); */
-      _controller.clear();
+      _controller.clear(); //清空文字輸入框
     }
   }
 
@@ -82,17 +87,17 @@ class _TodoListScreenState extends State<TodoListScreen> {
     final todo = _todos[index];
     setState(() {
       if (todo.isComplete) {
-        todo.isComplete = false;
-        todo.finishTime = null;
-        _user.completeTodos--;
+        todo.isComplete = false; //若已完成，則標記為未完成
+        todo.finishTime = null; //清空完成時間
+        _user.completeTodos--; //減少已完成數量
       } else {
         todo.isComplete = true;
         todo.finishTime = DateTime.now();
         _user.completeTodos++;
       }
     });
-    await _todoDao.writeTodos(_todos);
-    await _userDao.writeUser(_user);
+    await _todoDao.writeTodos(_todos); //將更新後的Todo清單寫回本地檔案
+    await _userDao.writeUser(_user); //將更新後的使用者數據寫回本地檔案
   }
 
   @override
@@ -135,23 +140,23 @@ class _TodoListScreenState extends State<TodoListScreen> {
                           todo.content,
                           style: TextStyle(
                             decoration: todo.isComplete
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
+                                ? TextDecoration.lineThrough // 已完成則添加刪除線
+                                : TextDecoration.none, // 未完成則無任何裝飾
                           ),
                         ),
                         Text(
-                          '新增時間: $creationTimeFormatted',
+                          '新增時間: $creationTimeFormatted', // 顯示創建時間
                           style: TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                       ],
                     ),
                     leading: Checkbox(
-                      value: todo.isComplete,
-                      onChanged: (_) => _toggleTodoStatus(index),
+                      value: todo.isComplete, // 顯示該項目是否已完成
+                      onChanged: (_) => _toggleTodoStatus(index), // 切換完成狀態
                     ),
                     trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () => _deleteTodo(index),
+                      icon: Icon(Icons.delete), // 刪除按鈕
+                      onPressed: () => _deleteTodo(index), // 點擊後刪除該項目
                     ),
                   );
                 },

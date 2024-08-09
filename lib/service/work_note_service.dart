@@ -1,5 +1,5 @@
 import '../models/todo.dart';
-import '../models/user.dart';
+//import '../models/user.dart';
 import '../daos/todo_dao_local_file.dart';
 import '../daos/user_dao_local_file.dart';
 
@@ -7,6 +7,7 @@ import '../daos/user_dao_local_file.dart';
 //當用戶刪除todo的時候，要減去用戶有幾個todo
 
 class WorkNoteService {
+  //建立本地文件存取的數據訪問對象
   final TodoDaoLocalFile _todoDao = TodoDaoLocalFile();
   final UserDaoLocalFile _userDao = UserDaoLocalFile();
 
