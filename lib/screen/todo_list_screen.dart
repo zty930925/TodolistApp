@@ -48,6 +48,9 @@ class _TodoListScreenState extends State<TodoListScreen> {
     });
   }
 
+  //_addTodo、_deleteTodo、_toggleTodoStatus對_user、_todos的操作只有更新畫面而已
+  //真正去修改json的是service/work_note_service.dart
+
   // 新增todo
   // 會去寫入todo.json和user.json
   void _addTodo() async {
