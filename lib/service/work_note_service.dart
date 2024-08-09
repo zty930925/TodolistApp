@@ -2,7 +2,7 @@ import '../models/todo.dart';
 //import '../models/user.dart';
 import '../daos/todo_dao_local_file.dart';
 import '../daos/user_dao_local_file.dart';
-
+//該檔案才是真正修改json資料的(通則：先讀，讀到了才可以進行修改)
 //當用戶新增todo的時候， 會記錄用戶有幾個todo，會記錄todo內容
 //當用戶刪除todo的時候，要減去用戶有幾個todo
 
