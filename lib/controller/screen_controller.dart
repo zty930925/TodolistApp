@@ -1,21 +1,24 @@
-//import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import '../screen/complete_todolist_screen.dart';
+import '../screen/login_screen.dart';
+import '../screen/todo_list_screen.dart';
 
-//頁面控制器(controller)
-class ScreenController {
-  //使用布林值，在兩個頁面之間做切換
-  bool isLoginScreen = true;
+class ScreenController extends StatelessWidget {
+  const ScreenController({super.key});
 
-  // 切換螢幕並返回相應的頁面
-  String toggleScreen() {
-    //如果isLoginScreen( = true)
-    if (isLoginScreen) {
-      //現在非登入頁面(在todolist頁面)，那我就要前往登入頁面
-      isLoginScreen = false;
-      return "/login";
-    } else {
-      //現在是登入頁面(非todolist頁面)，那我就要前往todolist頁面
-      isLoginScreen = true;
-      return "/todolist";
-    }
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Todo App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      routes: {
+        "/login": (BuildContext context) => LoginScreen(),
+        "/todolist": (BuildContext context) => TodoListScreen(),
+        "/completed_todo": (BuildContext context) => CompleteTodolistScreen(),
+      },
+      initialRoute: "/login",
+    );
   }
 }
