@@ -1,26 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:android_app_hw/screen/login_screen.dart';
-import 'package:android_app_hw/screen/todo_list_screen.dart';
-import 'package:android_app_hw/screen/complete_todolist_screen.dart';
+import '../controller/screen_controller.dart';
 
+//將用戶訪問路徑轉到對應controller
 void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Todo App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      routes: {
-        "/login": (BuildContext context) => LoginScreen(),
-        "/todolist": (BuildContext context) => TodoListScreen(),
-        "/completed_todo": (BuildContext context) => CompleteTodolistScreen(),
-      },
-      initialRoute: "/login",
-    );
-  }
+  //初始化flutter框架
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const ScreenController());
 }

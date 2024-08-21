@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 //建立類別函數CommonDrawer
+//這是一個側邊選單
 class CommonDrawer {
   //使用getDrawer靜態函數，不用建立物件就可調用
   static Drawer getDrawer(BuildContext context) {
@@ -12,24 +13,33 @@ class CommonDrawer {
       child: (ListView(
         //放入ListView專用的所有相關設定
         children: [
+          //第一個按鈕
           ListTile(
             //按鈕名稱
             title: const Text('登入'),
-            //設定要跳轉的頁面
+            //設定欲跳轉的頁面
             onTap: () {
-              //要跳轉至色塊變化頁面，初步展示StatefulWudget
+              //跳轉至登入頁面
               Navigator.pushNamed(context, '/login');
             },
           ),
+          //第二個按鈕
           ListTile(
+            //按鈕名稱
             title: const Text('完整代辦清單'),
+            //設定欲跳轉的頁面
             onTap: () {
+              //跳轉至todolist一覽頁
               Navigator.pushNamed(context, '/todolist');
             },
           ),
+          //第三個按鈕
           ListTile(
+            //按鈕名稱
             title: const Text('已完成項目'),
+            //設定欲跳轉的頁面
             onTap: () {
+              //跳轉至completed_todo的一覽頁(只顯示已完成的項目)
               Navigator.pushNamed(context, '/completed_todo');
             },
           ),
