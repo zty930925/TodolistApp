@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../components/common_drawer.dart';
+import '../components/todo_component.dart'; // Import the new component
 import '../models/todo.dart';
 import '../models/user.dart';
+import '../components/common_drawer.dart';
 import '../daos/todo_dao_local_file.dart';
 import '../daos/user_dao_local_file.dart';
 import '../service/work_note_service.dart';
-import 'package:intl/intl.dart';
+//import 'package:intl/intl.dart';
 
 class TodoListScreen extends StatefulWidget {
   @override
@@ -69,7 +70,6 @@ class _TodoListScreenState extends State<TodoListScreen> {
     setState(() {
       if (todo.isComplete) {
         todo.isComplete = false;
-        todo.finishTime = null;
         _user.completeTodos--;
       } else {
         todo.isComplete = true;
@@ -82,11 +82,14 @@ class _TodoListScreenState extends State<TodoListScreen> {
   }
 
   @override
+  //畫面的視覺呈現
+  //實現build方法
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('代辦清單'),
+        title: Text('完整代辦清單'),
       ),
+      //建置側邊選單
       drawer: CommonDrawer.getDrawer(context),
       body: Column(
         children: [
@@ -108,34 +111,11 @@ class _TodoListScreenState extends State<TodoListScreen> {
               itemCount: _todos.length,
               itemBuilder: (context, index) {
                 final todo = _todos[index];
-                final creationTimeFormatted =
-                    DateFormat('yyyy-MM-dd – kk:mm').format(todo.creationTime);
-                return ListTile(
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        todo.content,
-                        style: TextStyle(
-                          decoration: todo.isComplete
-                              ? TextDecoration.lineThrough
-                              : TextDecoration.none,
-                        ),
-                      ),
-                      Text(
-                        '新增時間: $creationTimeFormatted',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                  leading: Checkbox(
-                    value: todo.isComplete,
-                    onChanged: (_) => _toggleTodoStatus(index),
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () => _deleteTodo(index),
-                  ),
+                return TodoComponent(
+                  todo: todo,
+                  index: index,
+                  onDelete: _deleteTodo,
+                  onToggle: _toggleTodoStatus,
                 );
               },
             ),
