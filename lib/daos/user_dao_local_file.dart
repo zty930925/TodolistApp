@@ -23,16 +23,37 @@ class UserDaoLocalFile {
   }
 
   //從user.json中讀取User清單資料
+  //Future<User> readUser() async {
+  //try {
+  //使用final宣告file，用於取得user.json
+  //final file = await GetLocalFile();
+  //使用final宣告contents，用於讀取user.json字符串(dart不可用)
+  //final contents = await file.readAsString();
+  //使用final宣告jsonData，將字符串解碼成dart可用的資料結構
+  //final jsonData = jsonDecode(contents);
+  //將每個Json物件轉換為User物件並返回
+  //return User.fromJson(jsonData);
+  //} catch (e) {
+  //return User(totalTodos: 0, completeTodos: 0);
+  //}
+  //}
+
   Future<User> readUser() async {
     try {
-      //使用final宣告file，用於取得user.json
       final file = await GetLocalFile();
-      //使用final宣告contents，用於讀取user.json字符串(dart不可用)
       final contents = await file.readAsString();
-      //使用final宣告jsonData，將字符串解碼成dart可用的資料結構
       final jsonData = jsonDecode(contents);
-      //將每個Json物件轉換為User物件並返回
-      return User.fromJson(jsonData);
+      final user = User.fromJson(jsonData);
+
+      // 確保completeTodos和totalTodos不會是負數
+      if (user.completeTodos < 0) {
+        user.completeTodos = 0;
+      }
+      if (user.totalTodos < 0) {
+        user.totalTodos = 0;
+      }
+
+      return user;
     } catch (e) {
       return User(totalTodos: 0, completeTodos: 0);
     }

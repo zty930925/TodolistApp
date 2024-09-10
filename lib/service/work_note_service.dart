@@ -33,29 +33,37 @@ class WorkNoteService {
 
     final user = await _userDao.readUser();
     user.totalTodos--;
-    if (todo.isComplete == true) {
+
+    // 確保已完成項目數不會變成負數
+    if (todo.isComplete && user.completeTodos > 0) {
       user.completeTodos--;
     }
+
     await _userDao.writeUser(user);
   }
 
   //更新todo的狀態
   //會去更新todo.json和user.json
-  Future<void> updateTodoStatus(int index, String status) async {
+  Future<void> updateTodoStatus(int index, bool isComplete) async {
     final todos = await _todoDao.readTodos();
     final todo = todos[index];
-    todo.isComplete;
-    if (todo.isComplete == true) {
-      todo.creationTime = DateTime.now();
-    }
-    await _todoDao.writeTodos(todos);
 
-    final user = await _userDao.readUser();
-    if (todo.isComplete == true) {
-      user.completeTodos++;
-    } else if (todo.isComplete == false) {
-      user.completeTodos--;
+    // 檢查完成狀態是否更新
+    if (todo.isComplete != isComplete) {
+      todo.isComplete = isComplete;
+      await _todoDao.writeTodos(todos);
+
+      final user = await _userDao.readUser();
+
+      // 若狀態是已完成，則增加完成項目數
+      if (isComplete) {
+        user.completeTodos++;
+      }
+      // 若狀態從已完成變為未完成，且已完成項目大於0，則減少
+      else if (!isComplete && user.completeTodos > 0) {
+        user.completeTodos--;
+      }
+      await _userDao.writeUser(user);
     }
-    await _userDao.writeUser(user);
   }
 }
